@@ -145,7 +145,7 @@ class ResyService extends BaseService {
     user_long?: number;
     venue_id?: number;
   }) => {
-    const opts = structuredClone(params);
+    const opts = { ...(params || {}) };
     opts.party_size ??= 2;
     opts.lat ??= 0;
     opts.long ??= 0;
