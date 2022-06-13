@@ -6,9 +6,12 @@ import type { VenueToWatch } from "./controllers/VenuesService";
 import VenuesService from "./controllers/VenuesService";
 import dayjs from "dayjs";
 import type { EnhancedSlot } from "./types/find";
+
+const email = process.env.RESY_EMAIL!;
+const password = process.env.RESY_PASSWORD!;
 const service = new ResyService({
-  email: process.env.RESY_EMAIL!,
-  password: process.env.RESY_PASSWORD!,
+  email,
+  password,
 });
 
 const textController = new TextService();
@@ -71,17 +74,14 @@ const refreshAvailabilityForVenue = async (venue: VenueToWatch) => {
       return;
     }
     for (const dateToCheck of availableDates) {
-
       //if dateToCheck.date in list of dates
-      if(venue.allowedDates)
-      {        
-        if(venue.allowedDates.indexOf(dateToCheck.date) == -1)
-        {
+      if (venue.allowedDates) {
+        if (venue.allowedDates.indexOf(dateToCheck.date) == -1) {
           log.info("skipping available date because of allowed dates flag");
           continue;
         }
       }
-      
+
       const slots = (await service.getAvailableTimesForVenueAndDate(
         venue.id,
         dateToCheck.date,
@@ -122,12 +122,24 @@ const refreshAvailability = async () => {
 };
 
 const regenerateHeaders = async () => {
-  await service.generateHeadersAndLogin();
+  try {
+    if (!email || !password) {
+      log.warn(
+        "Email or password not set, did you forget to set the environment variables?"
+      );
+      return;
+    }
+    await service.generateHeadersAndLogin();
+  } catch (e) {
+    log.error(e);
+    log.error("Error regenerating headers and logging in");
+    process.exit(1);
+  }
 };
 // every day fetch every post
 cron.scheduleJob("*/5 * * * *", refreshAvailability);
 cron.scheduleJob("1 * * * *", regenerateHeaders);
 
-regenerateHeaders().then(() => {
-  refreshAvailability();
+regenerateHeaders().then(async () => {
+  await refreshAvailability();
 });

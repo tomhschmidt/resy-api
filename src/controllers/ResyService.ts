@@ -75,8 +75,20 @@ class ResyService extends BaseService {
     this.password = password;
     this.headers = {
       authorization: 'ResyAPI api_key="VbWk7s3L4KiK5fzlO7JD3Q5EYolJI7n5"',
+      "cache-control": "no-cache",
+      dnt: "1",
+      origin: "https://resy.com",
+      referer: "https://resy.com/",
+      "sec-ch-ua":
+        '" Not A;Brand";v="99", "Chromium";v="101", "Google Chrome";v="101"',
+      "sec-ch-ua-mobile": "?0",
+      "sec-ch-ua-platform": '"macOS"',
+      "sec-fetch-dest": "empty",
+      "sec-fetch-mode": "cors",
+      "sec-fetch-site": "same-site",
       "user-agent":
-        "Resy/2.37 (com.resy.ResyApp; build:2453; iOS 15.4.1) Alamofire/5.5.0",
+        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36",
+      "x-origin": "https://resy.com",
     };
   }
 
@@ -103,25 +115,8 @@ class ResyService extends BaseService {
     this.headers = {
       ...this.headers,
       authorization: 'ResyAPI api_key="VbWk7s3L4KiK5fzlO7JD3Q5EYolJI7n5"',
-      // "User-Agent":
-      //   "Resy/2.37 (com.resy.ResyApp; build:2453; iOS 15.4.1) Alamofire/5.5.0",
       "x-resy-auth-token": authToken,
       "x-resy-universal-auth": authToken,
-      // 'authorization': 'ResyAPI api_key="VbWk7s3L4KiK5fzlO7JD3Q5EYolJI7n5"',
-      "cache-control": "no-cache",
-      dnt: "1",
-      origin: "https://resy.com",
-      referer: "https://resy.com/",
-      "sec-ch-ua":
-        '" Not A;Brand";v="99", "Chromium";v="101", "Google Chrome";v="101"',
-      "sec-ch-ua-mobile": "?0",
-      "sec-ch-ua-platform": '"macOS"',
-      "sec-fetch-dest": "empty",
-      "sec-fetch-mode": "cors",
-      "sec-fetch-site": "same-site",
-      "user-agent":
-        "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36",
-      "x-origin": "https://resy.com",
     };
     return loginResp;
   };
