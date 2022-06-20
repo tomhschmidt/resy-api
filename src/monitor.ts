@@ -1,5 +1,6 @@
 import cron from "node-schedule";
 import log from "./log";
+import 'dotenv/config'
 import ResyService from "./controllers/ResyService";
 import TextService from "./controllers/TextService";
 import type { VenueToWatch } from "./controllers/VenuesService";
@@ -66,6 +67,7 @@ const parsePossibleSlots = async (
 };
 const refreshAvailabilityForVenue = async (venue: VenueToWatch) => {
   try {
+    log.info(`Looking for availability for ${venue.name}`);
     const availableDates = await service.getAvailableDatesForVenue(
       venue.id,
       venue.partySize
@@ -137,7 +139,7 @@ const regenerateHeaders = async () => {
   }
 };
 // every day fetch every post
-cron.scheduleJob("*/5 * * * *", refreshAvailability);
+cron.scheduleJob("*/2 * * * *", refreshAvailability);
 cron.scheduleJob("1 * * * *", regenerateHeaders);
 
 regenerateHeaders().then(async () => {
